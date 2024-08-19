@@ -1,0 +1,7 @@
+Hari ini komputer dinyalakan 2024-08-19 14:00:26
+running task 2024-08-19 14:01:00 Test Menit
+running task 2024-08-19 14:02:00 Test Menit
+running task 2024-08-19 14:03:00 Test Menit
+running task 2024-08-19 14:04:00 Test Menit
+running task 2024-08-19 14:05:00 Test Menit
+Hari ini komputer dinyalakan 2024-08-19 14:18:05
