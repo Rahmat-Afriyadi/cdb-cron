@@ -29,7 +29,9 @@ func Log(content string) {
 }
 
 func main() {
-	service.GetDataMohonFaktur()
+	dataOracle := service.GetDataMohonFaktur()
+	fmt.Println("ini data oracle yaa ", dataOracle[0]["TGL_LAHIR"])
+
 	// a := service.GetDataMasterKode()
 	// fmt.Println("ini data ya ", a)
 

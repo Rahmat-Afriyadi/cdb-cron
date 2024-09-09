@@ -6,14 +6,19 @@ import (
 	"time"
 )
 
-func GetDataMohonFaktur() {
+func GetDataMohonFaktur() []map[string]interface{} {
 
 	datas := []map[string]interface{}{}
 	oracleDB := config.NewOracleDB()
 	now := time.Now()
-	query := fmt.Sprintf("select a.NO_MSN,a.NM1_MOHON,TO_CHAR(A.TGL_LAHIR,'YYYY-MM-DD'),a.NO_TELEPON,a.NO_HP,a.KODE_AGAMA,a.E_MAIL,a.KODE_KERJA,a.AKUNFACEBOOK,a.AKUNTWITTER,a.AKUNINSTAGRAM,a.AKUNYOUTUBE,a.AL1_MOHON,TO_CHAR(A.TGL_FAKTUR,'YYYY-MM-DD'),a.NO_DLRP,a.NM_SALES,d.NM_MTR,a.JNS_JUAL,  from  maindealer.mohonfaktur a, maindealer.ppblistdetail b, maindealer.typemotorahm c, maindealer.typemotor d where a.no_msn=b.no_msn and b.kd_mdl=c.kd_mdl and c.no_mtr=d.no_mtr and a.tgl_faktur>=to_date('%s 00:00:00','ddmmyyyy hh24:mi:ss')  and a.tgl_faktur<=to_date('%s 23:59:59','ddmmyyyy hh24:mi:ss')", now.Format("02012006"), now.Format("02012006"))
+	query := fmt.Sprintf("select a.NO_MSN,a.NM1_MOHON,TO_CHAR(A.TGL_LAHIR,'YYYY-MM-DD') TGL_LAHIR,a.NO_TELEPON,a.NO_HP,a.KODE_AGAMA,a.E_MAIL,a.KODE_KERJA,a.AKUNFACEBOOK,a.AKUNTWITTER,a.AKUNINSTAGRAM,a.AKUNYOUTUBE,a.AL1_MOHON,TO_CHAR(A.TGL_FAKTUR,'YYYY-MM-DD') TGL_FAKTUR,a.NO_DLRP,a.NM_SALES,d.NM_MTR,a.JNS_JUAL,	a.JNS_BELI,a.NO_LEAS,a.NO_RGK,a.NO_KTPNPWP,a.KEL_MOHON,a.KEC_MOHON,a.KODE_POS,a.ID_SALES_ASLI,a.NO_KK,a.KODE_DIDIK,a.KELUAR_BLN,a.PRSH_NAMA,a.PRSH_ALAMAT,TO_CHAR(A.TGL_MOHON,'YYYY-MM-DD') TGL_MOHON from  maindealer.mohonfaktur a, maindealer.ppblistdetail b, maindealer.typemotorahm c, maindealer.typemotor d where a.no_msn=b.no_msn and b.kd_mdl=c.kd_mdl	and c.no_mtr=d.no_mtr and a.tgl_faktur>=to_date('%s 00:00:00','ddmmyyyy hh24:mi:ss')  and a.tgl_faktur<=to_date('%s 23:59:59','ddmmyyyy hh24:mi:ss')", now.Format("02012006"), now.Format("02012006"))
 
-	oracleDB.Raw(query).Scan(&datas)
+	fmt.Println("ini querynya ", query)
+	result := oracleDB.Raw(query).Scan(&datas)
+	if result.Error != nil {
+		fmt.Println("errornya disini yaa ", result.Error)
+	}
+	return datas
 }
 
 func UpdateDataMohonFaktur() {

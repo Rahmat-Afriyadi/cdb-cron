@@ -50,7 +50,7 @@ CREATE TABLE `mst_jns_beli` (
   `kd_beli` varchar(10) NOT NULL,
   `nm_beli` varchar(50) NOT NULL,
   PRIMARY KEY (`kd_beli`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,7 @@ CREATE TABLE `mst_jns_jual` (
   `kd_jual` varchar(10) NOT NULL,
   `nm_jual` varchar(50) NOT NULL,
   PRIMARY KEY (`kd_jual`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +158,7 @@ CREATE TABLE `mst_pendidikan` (
   `kd_pendidikan` varchar(10) NOT NULL,
   `nm_pendidikan` varchar(100) NOT NULL,
   PRIMARY KEY (`kd_pendidikan`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -182,7 +182,7 @@ CREATE TABLE `mst_pengeluaran` (
   `kd_pengeluaran` varchar(10) NOT NULL,
   `pengeluaran` varchar(100) NOT NULL,
   PRIMARY KEY (`kd_pengeluaran`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

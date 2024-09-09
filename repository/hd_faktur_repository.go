@@ -15,6 +15,7 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 	hdFakturs := []entity.HDFaktur2Full{}
 	for _, value := range mohonFaktur {
 
+		stsValid := "TIDAK VALID"
 		ketNoTelepon := "VALID"
 		ketNoHp := "VALID"
 		vEmail := "VALID"
@@ -27,20 +28,54 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 		if len(value["E_MAIL"].(string)) < 18 {
 			vEmail = "TIDAK VALID"
 		}
+		if ketNoTelepon == "VALID" && ketNoHp == "VALID" && vEmail == "VALID" {
+			stsValid = "VALID"
+		}
 
 		hdFaktur := entity.HDFaktur2Full{
 			NoMsn:        value["NO_MSN"].(string),
 			NmCustomer11: value["NM1_MOHON"].(string),
 			TglLahir2:    value["TGL_LAHIR"].(string),
+			NoTelp1:      value["NO_TELEPON	"].(string),
 			KetNoTelp1:   ketNoTelepon,
+			NoHp1:        value["NO_HP"].(string),
 			KetNoHp1:     ketNoHp,
-			VEmail:       vEmail,
+			Agama2:       value["KODE_AGAMA"].(string),
 			KAgama2:      masterKode["agama"][value["KODE_AGAMA"].(string)],
+			Email1:       value["E_MAIL"].(string),
+			VEmail:       vEmail,
+			KodeKerja:    value["KODE_KERJA"].(string),
 			KKodeKerja1:  masterKode["kerja"][value["KODE_KERJA"].(string)],
+			SmFacebook1:  value["AKUNFACEBOOK"].(string),
+			SmTwitter1:   value["AKUNTWITTER"].(string),
+			SmInstagram1: value["AKUNINSTAGRAM"].(string),
+			SmYoutube1:   value["AKUNYOUTUBE"].(string),
+			Alamat11:     value["AL1_MOHON"].(string),
+			TglFaktur:    value["TGL_FAKTUR"].(string),
+			KdDlr:        value["NO_DLRP"].(string),
+			NmSales1:     value["NM_SALES"].(string),
+			StsValid:     stsValid,
+			NmMtr:        value["NM_MTR"].(string),
+			JnsJual:      value["JNS_JUAL"].(string),
 			KJnsJual:     masterKode["jual"][value["JNS_JUAL"].(string)],
+			JnsBeli:      value["JNS_BELI"].(string),
 			KJnsBeli:     masterKode["beli"][value["JNS_BELI"].(string)],
+			NoLeas:       value["NO_LEAS"].(string),
+			KNoLeas:      masterKode["leasing"][value["NO_LEAS"].(string)],
+			NoRgk:        value["NO_RGK"].(string),
+			NoKtpnpwp:    value["NO_KTPNPWP"].(string),
+			Kel1:         value["KEL_MOHON"].(string),
+			Kec1:         value["KEC_MOHON"].(string),
+			Kodepos1:     value["KODE_POS"].(string),
+			IdSales:      value["ID_SALES_ASLI"].(string),
+			NoKk:         value["NO_KK"].(string),
+			KodeDidik:    value["KODE_DIDIK"].(string),
 			KKodeDidik1:  masterKode["pendidikan"][value["KODE_DIDIK"].(string)],
+			KeluarBln:    value["KELUAR_BLN"].(string),
 			KKeluarBln1:  masterKode["pengeluaran"][value["KELUAR_BLN"].(string)],
+			KerjaDi11:    value["PRSH_NAMA"].(string),
+			AlamatKtr11:  value["PRSH_ALAMAT"].(string),
+			TglMohon:     value["TGL_MOHON"].(string),
 		}
 
 		hdFakturs = append(hdFakturs, hdFaktur)
