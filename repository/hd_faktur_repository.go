@@ -16,17 +16,23 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 	for _, value := range mohonFaktur {
 
 		stsValid := "TIDAK VALID"
-		ketNoTelepon := "VALID"
-		ketNoHp := "VALID"
-		vEmail := "VALID"
-		if !(strings.HasPrefix(value["NO_TELEPON"].(string), "08") || strings.HasPrefix(value["NO_TELEPON"].(string), "628")) {
-			ketNoTelepon = "TIDAK VALID"
+		ketNoTelepon := "TIDAK VALID"
+		ketNoHp := "TIDAK VALID"
+		vEmail := "TIDAK VALID"
+		if value["NO_TELEPON"] != nil {
+			if strings.HasPrefix(value["NO_TELEPON"].(string), "08") || strings.HasPrefix(value["NO_TELEPON"].(string), "628") {
+				ketNoTelepon = "VALID"
+			}
 		}
-		if !(strings.HasPrefix(value["NO_HP"].(string), "08") || strings.HasPrefix(value["NO_HP"].(string), "628")) {
-			ketNoHp = "TIDAK VALID"
+		if value["NO_HP"] != nil {
+			if strings.HasPrefix(value["NO_HP"].(string), "08") || strings.HasPrefix(value["NO_HP"].(string), "628") {
+				ketNoHp = "VALID"
+			}
 		}
-		if len(value["E_MAIL"].(string)) < 18 {
-			vEmail = "TIDAK VALID"
+		if value["E_MAIL"] != nil {
+			if len(value["E_MAIL"].(string)) > 17 {
+				vEmail = "VALID"
+			}
 		}
 		if ketNoTelepon == "VALID" && ketNoHp == "VALID" && vEmail == "VALID" {
 			stsValid = "VALID"
@@ -36,9 +42,7 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 			NoMsn:        value["NO_MSN"].(string),
 			NmCustomer11: value["NM1_MOHON"].(string),
 			TglLahir2:    value["TGL_LAHIR"].(string),
-			NoTelp1:      value["NO_TELEPON	"].(string),
 			KetNoTelp1:   ketNoTelepon,
-			NoHp1:        value["NO_HP"].(string),
 			KetNoHp1:     ketNoHp,
 			Agama2:       value["KODE_AGAMA"].(string),
 			KAgama2:      masterKode["agama"][value["KODE_AGAMA"].(string)],
@@ -46,10 +50,6 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 			VEmail:       vEmail,
 			KodeKerja:    value["KODE_KERJA"].(string),
 			KKodeKerja1:  masterKode["kerja"][value["KODE_KERJA"].(string)],
-			SmFacebook1:  value["AKUNFACEBOOK"].(string),
-			SmTwitter1:   value["AKUNTWITTER"].(string),
-			SmInstagram1: value["AKUNINSTAGRAM"].(string),
-			SmYoutube1:   value["AKUNYOUTUBE"].(string),
 			Alamat11:     value["AL1_MOHON"].(string),
 			TglFaktur:    value["TGL_FAKTUR"].(string),
 			KdDlr:        value["NO_DLRP"].(string),
@@ -73,15 +73,38 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 			KKodeDidik1:  masterKode["pendidikan"][value["KODE_DIDIK"].(string)],
 			KeluarBln:    value["KELUAR_BLN"].(string),
 			KKeluarBln1:  masterKode["pengeluaran"][value["KELUAR_BLN"].(string)],
-			KerjaDi11:    value["PRSH_NAMA"].(string),
-			AlamatKtr11:  value["PRSH_ALAMAT"].(string),
 			TglMohon:     value["TGL_MOHON"].(string),
+		}
+
+		if value["NO_TELEPON"] != nil {
+			hdFaktur.NoTelp1 = value["NO_TELEPON"].(string)
+		}
+		if value["NO_HP"] != nil {
+			hdFaktur.NoHp1 = value["NO_HP"].(string)
+		}
+		if value["AKUNFACEBOOK"] != nil {
+			hdFaktur.SmFacebook1 = value["AKUNFACEBOOK"].(string)
+		}
+		if value["AKUNTWITTER"] != nil {
+			hdFaktur.SmTwitter1 = value["AKUNTWITTER"].(string)
+		}
+		if value["AKUNINSTAGRAM"] != nil {
+			hdFaktur.SmInstagram1 = value["AKUNINSTAGRAM"].(string)
+		}
+		if value["AKUNYOUTUBE"] != nil {
+			hdFaktur.SmYoutube1 = value["AKUNYOUTUBE"].(string)
+		}
+		if value["PRSH_NAMA"] != nil {
+			hdFaktur.KerjaDi11 = value["PRSH_NAMA"].(string)
+		}
+		if value["PRSH_ALAMAT"] != nil {
+			hdFaktur.AlamatKtr11 = value["PRSH_ALAMAT"].(string)
 		}
 
 		hdFakturs = append(hdFakturs, hdFaktur)
 	}
 	tx := cdbConf.Begin()
-	if err := tx.Create(&hdFakturs).Error; err != nil {
+	if err := tx.Save(&hdFakturs).Error; err != nil {
 		tx.Rollback()
 		log.Fatalf("error in batch insert: %v", err)
 	}

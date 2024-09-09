@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cron/repository"
 	"cron/service"
 	"fmt"
 	"os"
@@ -30,7 +31,7 @@ func Log(content string) {
 
 func main() {
 	dataOracle := service.GetDataMohonFaktur()
-	fmt.Println("ini data oracle yaa ", dataOracle[0]["TGL_LAHIR"])
+	repository.UpdateData(dataOracle)
 
 	// a := service.GetDataMasterKode()
 	// fmt.Println("ini data ya ", a)

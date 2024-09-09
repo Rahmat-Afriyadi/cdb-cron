@@ -1,7 +1,7 @@
 package entity
 
 type HDFaktur2Full struct {
-	NoMsn        string `gorm:"column:no_msn"`
+	NoMsn        string `gorm:"primary_key;column:no_msn"`
 	NmCustomer11 string `gorm:"column:nm_customer11"`
 	TglLahir2    string `gorm:"column:tgl_lahir2"`
 	NoTelp1      string `gorm:"column:no_telp1"`
