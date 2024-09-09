@@ -29,10 +29,13 @@ func Log(content string) {
 }
 
 func main() {
+	service.GetDataMohonFaktur()
+	// a := service.GetDataMasterKode()
+	// fmt.Println("ini data ya ", a)
 
+	Log("Hari ini komputer dinyalakan " + time.Now().Format("2006-01-02 15:04:05"))
 	jakartaTime, _ := time.LoadLocation("Asia/Jakarta")
 	scheduler := cron.New(cron.WithLocation(jakartaTime))
-	Log("Hari ini komputer dinyalakan " + time.Now().Format("2006-01-02 15:04:05"))
 
 	defer scheduler.Stop()
 	_, err := scheduler.AddFunc("15 18 * * *", func() {

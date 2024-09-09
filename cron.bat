@@ -1,31 +1,15 @@
 @echo off
 
-start cmd /k "cd /d D:\nextjs\mswkm && npm run start"
-
-:loop
-
-start cmd /k "cd /d D:\Golang\src\mswkm && go run server.go"
-
-echo Loop 0 Executable crashed with exit code %errorlevel%. Restarting...
-timeout /t 3
-
-if %ERRORLEVEL% neq 0 (
-    echo Error encountered, retrying...
-    timeout /t 3 /nobreak >nul  :: Wait for 5 seconds before retrying
-    goto loop
-)
 
 :loop1
-
-start cmd /k "cd /d D:\Golang\src\cron && go run main.go"
-
-echo Loop 1 Executable crashed with exit code %errorlevel%. Restarting...
-timeout /t 3
-
-if %ERRORLEVEL% neq 0 (
-    echo Error encountered, retrying...
-    timeout /t 3 /nobreak >nul  :: Wait for 5 seconds before retrying
+echo Running Go program... 
+go run main.go
+if %ERRORLEVEL% NEQ 0 (
+    echo Program crashed with exit code %ERRORLEVEL%. Restarting...
+    timeout /t 2 >nul
     goto loop1
+) else (
+    echo Program exited normally.
 )
 
 
