@@ -31,6 +31,7 @@ func Log(content string) {
 
 func main() {
 	dataOracle := service.GetDataMohonFaktur()
+	fmt.Println("ini data oracle yaa ", dataOracle)
 	repository.UpdateData(dataOracle)
 
 	// a := service.GetDataMasterKode()

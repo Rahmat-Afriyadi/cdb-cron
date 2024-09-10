@@ -103,11 +103,13 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 
 		hdFakturs = append(hdFakturs, hdFaktur)
 	}
-	tx := cdbConf.Begin()
-	if err := tx.Save(&hdFakturs).Error; err != nil {
-		tx.Rollback()
-		log.Fatalf("error in batch insert: %v", err)
+	if len(hdFakturs) > 0 {
+		tx := cdbConf.Begin()
+		if err := tx.Save(&hdFakturs).Error; err != nil {
+			tx.Rollback()
+			log.Fatalf("error in batch insert: %v", err)
+		}
+		tx.Commit()
 	}
-	tx.Commit()
 
 }
