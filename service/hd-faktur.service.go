@@ -20,12 +20,18 @@ func GetDataMohonFaktur() []map[string]interface{} {
 	return datas
 }
 
-func UpdateDataMohonFaktur() {
-	insertQueryBegin := fmt.Sprintf("INSERT INTO cdb.hd_faktur2023 (no_msn,nm_customer11,tgl_lahir2,no_telp1,ket_no_telp1,no_hp1,ket_no_hp1,agama2,k_agama2,email1,v_email,kode_kerja,k_kode_kerja1,sm_facebook1,sm_twitter1,sm_instagram1,sm_youtube1,alamat11,tgl_faktur,kd_dlr,nm_sales1,sts_valid,nm_mtr,jns_jual,k_jns_jual,jns_beli,k_jns_beli,no_leas,k_no_leas,no_rgk,no_ktpnpwp,kel1,kec1,kodepos1,id_sales,no_kk,kode_didik,k_kode_didik1,keluar_bln,k_keluar_bln1,kerja_di11,alamat_ktr11,tgl_mohon) VALUES %s", "test")
-	// insertQuery := fmt.Sprintf("('JME1E1091661','SUHARNO','1984-09-25','089512893458','VALID','089512893458','VALID','1','ISLAM','N@GMAIL.COM','TIDAK VALID','11','Lain-lain','','','','','KP. KARANG MULYA RT 003 RW 001','2024-08-26','055','AFIFAH HUSNA','TIDAK VALID','BEAT SPORTY CBS','2','Kredit','I','INDIVIDUAL','06','ADIRA - ADIRA DINAMIKA MULTI FINANCE','JME115RK091355','3309172509840001','KARANG MULYA','KARANG TENGAH','15157','583594','3671121711150012','4','SLTA/SMA','5','Rp 2,500,001 - Rp 4,000,000','','','2024-08-16');")
-	insertQuery := fmt.Sprintf("('JME1E1091661','SUHARNO','1984-09-25','089512893458','VALID','089512893458','VALID','1','ISLAM','N@GMAIL.COM','TIDAK VALID','11','Lain-lain','','','','','KP. KARANG MULYA RT 003 RW 001','2024-08-26','055','AFIFAH HUSNA','TIDAK VALID','BEAT SPORTY CBS','2','Kredit','I','INDIVIDUAL','06','ADIRA - ADIRA DINAMIKA MULTI FINANCE','JME115RK091355','3309172509840001','KARANG MULYA','KARANG TENGAH','15157','583594','3671121711150012','4','SLTA/SMA','5','Rp 2,500,001 - Rp 4,000,000','','','2024-08-16'); %s ", "test")
+func GetDataMohonFakturMbaLeli() []map[string]interface{} {
 
-	fmt.Println("ini data ", insertQuery, insertQueryBegin)
+	datas := []map[string]interface{}{}
+	oracleDB := config.NewOracleDB()
+	// now := time.Now()
+	query := fmt.Sprintf("select a.NO_MSN,a.NO_RGK,a.NO_DLRP,E.NM_DLR,a.NM1_MOHON,a.NM2_MOHON,TO_CHAR(a.TGL_LAHIR,'YYYY-MM-DD') TGL_LAHIR ,a.JNS_KLM,a.NO_TELEPON, a.NO_HP,a.AL1_MOHON,a.AL2_MOHON,a.RT_MOHON,a.RW_MOHON,a.KEL_MOHON,a.KEC_MOHON,a.KOTA_MOHON,a.KODE_POS, a.AL_SRT,a.AL1_SRT,a.AL2_SRT,a.AL3_SRT,a.KEC_SRT,a.KOTA_SRT,a.pos_srt, a.NAMA_PNJJWB,d.no_mtr, d.nm_mtr,a.kode_kerja, a.kode_didik, a.keluar_bln, a.motor_hir, a.jns_beli, a.bdn_usaha, a.jns_jual, TO_CHAR(a.tgl_mohon,'YYYY-MM-DD') TGL_MOHON,a.id_sales_asli, a.nm_sales_asli, a.no_ktpnpwp, a.dp, a.cicilan, a.sts_rumah, a.sts_hp, a.e_mail, a.no_leas,a.jml_angsuran,a.KODE_AGAMA,a.SEDIA_DIHUB,a.JNS_MOTOR,a.SM_DIBELI,a.PROP_MOHON,a.TUJU_PAK1,a.AKUNFACEBOOK,a.AKUNINSTAGRAM,a.AKUNTWITTER,a.AKUNYOUTUBE,a.HOBI, a.NO_KK,TO_CHAR(a.tgl_faktur,'YYYY-MM-DD') TGL_FAKTUR,a.PRSH_NAMA,a.PRSH_ALAMAT,a.PRSH_KEC,a.PRSH_KOTA,a.PRSH_PROP,a.NO_NPWP,a.AKTIF_JUAL from maindealer.mohonfaktur a, maindealer.ppblistdetail b, maindealer.typemotorahm c, maindealer.typemotor d, maindealer.dealer e where a.no_msn=b.no_msn and b.kd_mdl=c.kd_mdl and c.no_mtr=d.no_mtr and a.no_dlrp=e.no_dlr and a.tgl_faktur>=to_date('%s 00:00:00','ddmmyyyy hh24:mi:ss') and a.tgl_faktur<=to_date('%s 23:59:59','ddmmyyyy hh24:mi:ss') and SUBSTR(a.AL1_MOHON,1,5)<>'PUTIH'", "31082024", "31082024")
+
+	result := oracleDB.Raw(query).Scan(&datas)
+	if result.Error != nil {
+		fmt.Println("errornya disini yaa ", result.Error)
+	}
+	return datas
 }
 
 // {JM04E1872694 08979620183 08979620183 ardidwicahyono@gmail.com 2b}

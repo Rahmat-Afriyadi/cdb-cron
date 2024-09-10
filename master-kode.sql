@@ -205,3 +205,6 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2024-09-09 15:50:50
+
+INSERT INTO `db_wkm2`.`data_mba_leli` (`no_msn`,`no_rgk`,`kd_dlr`,`nm_dlr`,`nm_customer11`,`nm_customer12`,`tgl_lahir1`,`jns_klm1`,`no_telp1`,`no_hp1`,`alamat11`,`alamat12`,`rt1`,`rw1`,`kel1`,`kec1`,`kota1`,`kodepos1`,`sts_alamat`,`alamat_srt11`,`alamat_srt12`,`kel_srt1`,`kec_srt1`,`kota_srt1`,`kodepos_srt1`, `pic_perusahaan`,`no_mtr`,`nm_mtr`,`kode_kerja`,`kode_didik`,`keluar_bln`,`motor_hir`,`jns_beli`,`bdn_usaha`,`jns_jual`,`tgl_mohon`,`kd_user`,`kd_customer`,`id_sales`,`nm_sales1`,`tujuan_pakai1`,`jns_klm2`,`sts_kirim`,`sts_cetak`,`sts_source`,`sts_asuransi`,`sts_tertanggung`,`sts_kawin`,`sts_lengkap`,`agama2`,`kode_didik2`,`kode_kerja2`,`tujuan_pakai2`,`keluar_bln2`,`sts_sms`,`sts_cetak3`,`no_ktpnpwp`,`dp_mtr`,`cicilan_mtr`,`sts_kepemilikan_rumah`,`sts_hp_pra_pasca`,`kd_client`,`email1`,`no_leas`,`angsuran`,`agama1`,`sedia_dihub`,`jns_motor`,`sm_dibeli`,`prop_mohon`,`sms_no`,`tgl_akhir_tenor`,`sm_facebook1`,`sm_instagram1`,`sm_twitter1`,`sm_youtube1`,`hobby3`,`no_kk`,`tgl_faktur`,`kerja_di_fkt`,`alamat_ktr_fkt`,`kec_ktr_fkt`,`kota_ktr_fkt`,`prop_ktr_fkt`,`no_npwp`,`aktif_jual`) VALUES
+

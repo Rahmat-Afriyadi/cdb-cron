@@ -46,6 +46,6 @@ type HDFaktur2Full struct {
 	TglMohon     string `gorm:"column:tgl_mohon"`
 }
 
-func (HDFaktur2Full) TableName() string {
-	return "hd_faktur2"
-}
+// func (HDFaktur2Full) TableName() string {
+// 	return "hd_faktur2"
+// }

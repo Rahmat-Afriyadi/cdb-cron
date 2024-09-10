@@ -4,6 +4,7 @@ import (
 	"cron/config"
 	"cron/entity"
 	"cron/service"
+	"fmt"
 	"log"
 	"strings"
 )
@@ -34,7 +35,7 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 				vEmail = "VALID"
 			}
 		}
-		if ketNoTelepon == "VALID" && ketNoHp == "VALID" && vEmail == "VALID" {
+		if (ketNoTelepon == "VALID" || ketNoHp == "VALID") && vEmail == "VALID" {
 			stsValid = "VALID"
 		}
 
@@ -105,11 +106,19 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 	}
 	if len(hdFakturs) > 0 {
 		tx := cdbConf.Begin()
-		if err := tx.Save(&hdFakturs).Error; err != nil {
+		if err := tx.Table("hd_faktur2024").Save(&hdFakturs).Error; err != nil {
 			tx.Rollback()
 			log.Fatalf("error in batch insert: %v", err)
 		}
 		tx.Commit()
+
+		tx1 := cdbConf.Begin()
+		if err := tx1.Table("hd_faktur2").Save(&hdFakturs).Error; err != nil {
+			tx1.Rollback()
+			log.Fatalf("error in batch insert: %v", err)
+		}
+		tx1.Commit()
 	}
+	fmt.Println("Done yaa...")
 
 }

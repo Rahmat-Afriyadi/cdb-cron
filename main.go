@@ -30,12 +30,6 @@ func Log(content string) {
 }
 
 func main() {
-	dataOracle := service.GetDataMohonFaktur()
-	fmt.Println("ini data oracle yaa ", dataOracle)
-	repository.UpdateData(dataOracle)
-
-	// a := service.GetDataMasterKode()
-	// fmt.Println("ini data ya ", a)
 
 	Log("Hari ini komputer dinyalakan " + time.Now().Format("2006-01-02 15:04:05"))
 	jakartaTime, _ := time.LoadLocation("Asia/Jakarta")
@@ -58,18 +52,18 @@ func main() {
 		fmt.Println("cron error ", err)
 	}
 
-	// _, err = scheduler.AddFunc("* * * * *", func() {
-	// 	a := time.Now()
-	// 	Log("running task " + a.Format("2006-01-02 15:04:05") + " Test Menit")
-	// })
-	// if err != nil {
-	// 	fmt.Println("cron error ", err)
-	// }
+	_, err = scheduler.AddFunc("15 21 * * *", func() {
+		a := time.Now()
+		dataOracle := service.GetDataMohonFaktur()
+		repository.UpdateData(dataOracle)
+		Log("running task " + a.Format("2006-01-02 15:04:05") + " HdFaktur2 dan HdFaktur2024")
+	})
+	if err != nil {
+		fmt.Println("cron error ", err)
+	}
 
 	scheduler.Start()
 
 	select {}
 
 }
-
-// {JM04E1872694 08979620183 08979620183 ardidwicahyono@gmail.com 2b}
