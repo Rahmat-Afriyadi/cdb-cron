@@ -30,6 +30,9 @@ func Log(content string) {
 }
 
 func main() {
+	// dataMohonFaktur := service.GetDataMohonFakturMbaLeli()
+	// repository.InsertDataMbaLeli(dataMohonFaktur)
+	repository.GroupSetOfCheck()
 
 	Log("Hari ini komputer dinyalakan " + time.Now().Format("2006-01-02 15:04:05"))
 	jakartaTime, _ := time.LoadLocation("Asia/Jakarta")
