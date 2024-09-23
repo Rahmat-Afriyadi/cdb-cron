@@ -9,9 +9,38 @@ import (
 	"strconv"
 )
 
+func SaveTrWmsFaktur2(hdFakturs []entity.MbaLeliFull) {
+	localDb := config.NewLocalDB()
+	if len(hdFakturs) > 0 {
+		tx := localDb.Begin()
+		batchSize := 1000
+		for i := 0; i < len(hdFakturs); i += batchSize {
+			end := i + batchSize
+			if end > len(hdFakturs) {
+				end = len(hdFakturs)
+			}
+
+			batch := hdFakturs[i:end]
+			if err := tx.Table("tr_wms_faktur2").Save(&batch).Error; err != nil {
+				tx.Rollback()
+				fmt.Println("Error:", err)
+				return
+			}
+		}
+		tx.Commit()
+	}
+}
 func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 	// cdbConf := config.NewCDBWebDB()
 	localDb2 := config.NewLocal2DB()
+	deleteTx := localDb2.Begin()
+	result := deleteTx.Exec("delete from data_mba_leli")
+	if result.Error != nil {
+		deleteTx.Rollback()
+		fmt.Println("Error:", result.Error)
+		return
+	}
+	deleteTx.Commit()
 
 	hdFakturs := []entity.MbaLeliFull{}
 
@@ -19,6 +48,7 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 		hdFaktur := entity.MbaLeliFull{
 			NoMsn:        value["NO_MSN"].(string),
 			NoRgk:        value["NO_RGK"].(string),
+			NmMtr:        value["NM_MTR"].(string),
 			KdDlr:        value["NO_DLRP"].(string),
 			NmDlr:        value["NM_DLR"].(string),
 			NmCustomer11: value["NM1_MOHON"].(string),
@@ -33,6 +63,8 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 			TglMohon:     value["TGL_MOHON"].(string),
 			KdUser:       "99",
 			KdCustomer:   "1",
+			StsCetak3:    0,
+			KdClient:     "1",
 			// JnsKlm2:             value[""].(string),
 			// StsKirim:            value[""].(string),
 			// StsCetak:            value[""].(string),
@@ -44,23 +76,22 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 			// Agama2:              value[""].(string),
 			// KodeDidik2:          value[""].(string),
 			// KodeKerja2:          value[""].(string),
-			// TujuanPakai2:        value[""].(string),
 			// KeluarBln2:          value[""].(string),
 			// StsSms:              value[""].(string),
 			// StsCetak3:           value[""].(string),
-			KdClient:   "",
-			Email1:     value["E_MAIL"].(string),
-			NoLeas:     value["NO_LEAS"].(string),
-			Angsuran:   value["JML_ANGSURAN"].(string),
-			Agama1:     value["KODE_AGAMA"].(string),
-			SediaDihub: value["SEDIA_DIHUB"].(string),
-			JnsMotor:   value["JNS_MOTOR"].(string),
-			SmDibeli:   value["SM_DIBELI"].(string),
-			PropMohon:  value["PROP_MOHON"].(string),
-			Hobby3:     value["HOBI"].(string),
-			NoKk:       value["NO_KK"].(string),
-			TglFaktur:  value["TGL_FAKTUR"].(string),
-			AktifJual:  value["AKTIF_JUAL"].(string),
+			TujuanPakai1: value["TUJU_PAK1"].(string),
+			Email1:       value["E_MAIL"].(string),
+			NoLeas:       value["NO_LEAS"].(string),
+			Angsuran:     value["JML_ANGSURAN"].(string),
+			Agama1:       value["KODE_AGAMA"].(string),
+			SediaDihub:   value["SEDIA_DIHUB"].(string),
+			JnsMotor:     value["JNS_MOTOR"].(string),
+			SmDibeli:     value["SM_DIBELI"].(string),
+			PropMohon:    value["PROP_MOHON"].(string),
+			Hobby3:       value["HOBI"].(string),
+			NoKk:         value["NO_KK"].(string),
+			TglFaktur:    value["TGL_FAKTUR"].(string),
+			AktifJual:    value["AKTIF_JUAL"].(string),
 		}
 		if value["NM2_MOHON"] != nil {
 			hdFaktur.NmCustomer12 = value["NM2_MOHON"].(string)
@@ -107,8 +138,8 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 		if value["KODE_KERJA"] != nil {
 			hdFaktur.KodeKerja = value["KODE_KERJA"].(string)
 		}
-		if value["KELUAR_BULAN"] != nil {
-			hdFaktur.KeluarBln = value["KELUAR_BULAN"].(string)
+		if value["KELUAR_BLN"] != nil {
+			hdFaktur.KeluarBln = value["KELUAR_BLN"].(string)
 		}
 		if value["KODE_DIDIK"] != nil {
 			hdFaktur.KodeDidik = value["KODE_DIDIK"].(string)
@@ -159,6 +190,7 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 			if len(value["NO_KTPNPWP"].(string)) > 16 {
 				hdFaktur.NoKtpNpwp = value["NO_KTPNPWP"].(string)[:16]
 			}
+			hdFaktur.NoKtpNpwp = value["NO_KTPNPWP"].(string)
 		}
 		if value["DP"] != nil {
 			if floatVal, ok := value["DP"].(float64); ok {
@@ -209,15 +241,14 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 
 func GroupSetOfCheck() {
 	localDb2 := config.NewLocal2DB()
+
 	var result0 *sql.Rows
 	sqlStatement := "SELECT no_telp1, count(*) FROM data_mba_leli group by no_telp1 having count(*) >1"
-
 	result0, err := localDb2.Raw(sqlStatement).Rows()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer result0.Close()
-
 	for result0.Next() {
 		var no_telp1 string
 		var count int
@@ -231,13 +262,11 @@ func GroupSetOfCheck() {
 	}
 
 	sqlStatement = "SELECT no_hp1, count(*) FROM data_mba_leli group by no_hp1 having count(*) >1"
-
 	result0, err = localDb2.Raw(sqlStatement).Rows()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer result0.Close()
-
 	for result0.Next() {
 		var no_hp1 string
 		var count int
@@ -339,14 +368,56 @@ func GroupSetOfCheck() {
 	}
 	tx4.Commit()
 
-	testQuery := entity.Get4xTelp()
+	query3X = "update db_wkm2.data_mba_leli set ket_no_hp1='3X' where no_hp1 like ?;"
 	tx5 := localDb2.Begin()
-	result = tx5.Exec(testQuery)
+	for _, value := range numbers3X {
+		result := tx5.Exec(query3X, "%"+value)
+		if result.Error != nil {
+			tx5.Rollback()
+			fmt.Println("Error:", result.Error)
+			return
+		}
+	}
+	tx5.Commit()
+
+	query4X := entity.Get4xTelp()
+	tx6 := localDb2.Begin()
+	result = tx6.Exec(query4X)
 	if result.Error != nil {
-		tx5.Rollback()
+		tx6.Rollback()
 		fmt.Println("Error:", result.Error)
 		return
 	}
-	tx5.Commit()
+	tx6.Commit()
+
+	query4X = entity.Get4XHp()
+	tx7 := localDb2.Begin()
+	result = tx7.Exec(query4X)
+	if result.Error != nil {
+		tx7.Rollback()
+		fmt.Println("Error:", result.Error)
+		return
+	}
+	tx7.Commit()
+
+	query5X := entity.Get5xTelp()
+	tx8 := localDb2.Begin()
+	result = tx8.Exec(query5X)
+	if result.Error != nil {
+		tx8.Rollback()
+		fmt.Println("Error:", result.Error)
+		return
+	}
+	tx8.Commit()
+
+	query5X = entity.Get5xHp()
+	tx9 := localDb2.Begin()
+	result = tx9.Exec(query5X)
+	if result.Error != nil {
+		tx9.Rollback()
+		fmt.Println("Error:", result.Error)
+		return
+	}
+	tx9.Commit()
 
 }

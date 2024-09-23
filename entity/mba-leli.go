@@ -56,7 +56,7 @@ type MbaLeliFull struct {
 	TujuanPakai2        string  `gorm:"column:tujuan_pakai2"`
 	KeluarBln2          string  `gorm:"column:keluar_bln2"`
 	StsSms              string  `gorm:"column:sts_sms"`
-	StsCetak3           string  `gorm:"column:sts_cetak3"`
+	StsCetak3           int     `gorm:"column:sts_cetak3"`
 	NoKtpNpwp           string  `gorm:"column:no_ktpnpwp"`
 	DpMtr               float64 `gorm:"column:dp_mtr"`
 	CicilanMtr          float64 `gorm:"column:cicilan_mtr"`

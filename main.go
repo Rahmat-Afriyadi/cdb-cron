@@ -11,7 +11,7 @@ import (
 )
 
 func Log(content string) {
-	fileName := "log.txt"
+	fileName := "log1.txt"
 
 	// Open the file for appending (create if it doesn't exist)
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -30,9 +30,6 @@ func Log(content string) {
 }
 
 func main() {
-	// dataMohonFaktur := service.GetDataMohonFakturMbaLeli()
-	// repository.InsertDataMbaLeli(dataMohonFaktur)
-	repository.GroupSetOfCheck()
 
 	Log("Hari ini komputer dinyalakan " + time.Now().Format("2006-01-02 15:04:05"))
 	jakartaTime, _ := time.LoadLocation("Asia/Jakarta")
@@ -60,6 +57,13 @@ func main() {
 		dataOracle := service.GetDataMohonFaktur()
 		repository.UpdateData(dataOracle)
 		Log("running task " + a.Format("2006-01-02 15:04:05") + " HdFaktur2 dan HdFaktur2024")
+
+		dataMohonFaktur := service.GetDataMohonFakturMbaLeli()
+		repository.InsertDataMbaLeli(dataMohonFaktur)
+		repository.GroupSetOfCheck()
+		dataMbaLeli := service.GetDataMbaLeli()
+		repository.SaveTrWmsFaktur2(dataMbaLeli)
+		Log("running task " + a.Format("2006-01-02 15:04:05") + " TrWmsFaktur2")
 	})
 	if err != nil {
 		fmt.Println("cron error ", err)
