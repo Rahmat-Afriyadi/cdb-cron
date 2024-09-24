@@ -104,21 +104,29 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 
 		hdFakturs = append(hdFakturs, hdFaktur)
 	}
+
 	if len(hdFakturs) > 0 {
 		tx := cdbConf.Begin()
-		if err := tx.Table("hd_faktur2024").Save(&hdFakturs).Error; err != nil {
-			tx.Rollback()
-			log.Fatalf("error in batch insert: %v", err)
+		batchSize := 500
+		for i := 0; i < len(hdFakturs); i += batchSize {
+			end := i + batchSize
+			if end > len(hdFakturs) {
+				end = len(hdFakturs)
+			}
+
+			batch := hdFakturs[i:end]
+			if err := tx.Table("hd_faktur2024").Save(&batch).Error; err != nil {
+				tx.Rollback()
+				log.Fatalf("error in batch insert: %v", err)
+			}
+			if err := tx.Table("hd_faktur2").Save(&batch).Error; err != nil {
+				tx.Rollback()
+				log.Fatalf("error in batch insert: %v", err)
+			}
 		}
 		tx.Commit()
-
-		tx1 := cdbConf.Begin()
-		if err := tx1.Table("hd_faktur2").Save(&hdFakturs).Error; err != nil {
-			tx1.Rollback()
-			log.Fatalf("error in batch insert: %v", err)
-		}
-		tx1.Commit()
 	}
+
 	fmt.Println("Done yaa...")
 
 }
