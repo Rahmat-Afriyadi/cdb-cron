@@ -12,7 +12,7 @@ func GetDataMohonFaktur() []map[string]interface{} {
 	datas := []map[string]interface{}{}
 	oracleDB := config.NewOracleDB()
 	now := time.Now()
-	from := now.AddDate(0, 0, -3)
+	from := now
 	if now.Weekday() == 1 {
 		from = from.AddDate(0, 0, -2)
 	}
@@ -56,16 +56,6 @@ func GetMaxTglFakturTrWmsFaktur2() entity.MaxTglFaktur {
 	data := entity.MaxTglFaktur{}
 	query := "select max(tgl_faktur) tgl_faktur from tr_wms_faktur2"
 	result := localDb.Raw(query).Scan(&data)
-	if result.Error != nil {
-		fmt.Println("errornya disini yaa ", result.Error)
-	}
-	return data
-}
-func GetMaxTglFakturHdFaktur2() entity.MaxTglFaktur {
-	cdbConf := config.NewCDBWebDB()
-	data := entity.MaxTglFaktur{}
-	query := "select max(tgl_faktur) hd_faktur2 from tr_wms_faktur2"
-	result := cdbConf.Raw(query).Scan(&data)
 	if result.Error != nil {
 		fmt.Println("errornya disini yaa ", result.Error)
 	}

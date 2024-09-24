@@ -31,12 +31,6 @@ func Log(content string) {
 
 func main() {
 
-	a := time.Now()
-	// from := a.AddDate(0, 0, -15)
-	dataOracle := service.GetDataMohonFaktur()
-	repository.UpdateData(dataOracle)
-	Log("running task " + a.Format("2006-01-02 15:04:05") + " HdFaktur2 dan HdFaktur2024")
-
 	Log("Hari ini komputer dinyalakan " + time.Now().Format("2006-01-02 15:04:05"))
 	jakartaTime, _ := time.LoadLocation("Asia/Jakarta")
 	scheduler := cron.New(cron.WithLocation(jakartaTime))
