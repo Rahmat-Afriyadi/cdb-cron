@@ -7,13 +7,14 @@ import (
 	"fmt"
 	"log"
 	"strconv"
+	"time"
 )
 
 func SaveTrWmsFaktur2(hdFakturs []entity.MbaLeliFull) {
 	localDb := config.NewLocalDB()
 	if len(hdFakturs) > 0 {
 		tx := localDb.Begin()
-		batchSize := 1000
+		batchSize := 500
 		for i := 0; i < len(hdFakturs); i += batchSize {
 			end := i + batchSize
 			if end > len(hdFakturs) {
@@ -21,7 +22,7 @@ func SaveTrWmsFaktur2(hdFakturs []entity.MbaLeliFull) {
 			}
 
 			batch := hdFakturs[i:end]
-			if err := tx.Table("tr_wms_faktur2").Save(&batch).Error; err != nil {
+			if err := tx.Table("tr_wms_faktur2").Create(&batch).Error; err != nil {
 				tx.Rollback()
 				fmt.Println("Error:", err)
 				return
@@ -52,7 +53,6 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 			KdDlr:        value["NO_DLRP"].(string),
 			NmDlr:        value["NM_DLR"].(string),
 			NmCustomer11: value["NM1_MOHON"].(string),
-			TglLahir1:    value["TGL_LAHIR"].(string),
 			JnsKlm1:      value["JNS_KLM"].(string),
 			NoHp1:        value["NO_HP"].(string),
 			Alamat11:     value["AL1_MOHON"].(string),
@@ -95,6 +95,12 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 		}
 		if value["NM2_MOHON"] != nil {
 			hdFaktur.NmCustomer12 = value["NM2_MOHON"].(string)
+		}
+		if value["TGL_LAHIR"] != nil {
+			tglLahir1, err1 := time.Parse("2006-01-02", value["TGL_LAHIR"].(string))
+			if err1 == nil {
+				hdFaktur.TglLahir1 = &tglLahir1
+			}
 		}
 		if value["NO_TELEPON"] != nil {
 			hdFaktur.NoTelp1 = value["NO_TELEPON"].(string)
@@ -189,8 +195,9 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 		if value["NO_KTPNPWP"] != nil {
 			if len(value["NO_KTPNPWP"].(string)) > 16 {
 				hdFaktur.NoKtpNpwp = value["NO_KTPNPWP"].(string)[:16]
+			} else {
+				hdFaktur.NoKtpNpwp = value["NO_KTPNPWP"].(string)
 			}
-			hdFaktur.NoKtpNpwp = value["NO_KTPNPWP"].(string)
 		}
 		if value["DP"] != nil {
 			if floatVal, ok := value["DP"].(float64); ok {
