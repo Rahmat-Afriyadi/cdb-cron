@@ -22,7 +22,7 @@ func SaveTrWmsFaktur2(hdFakturs []entity.MbaLeliFull) {
 			}
 
 			batch := hdFakturs[i:end]
-			if err := tx.Table("tr_wms_faktur2").Create(&batch).Error; err != nil {
+			if err := tx.Table("tr_wms_faktur2").Save(&batch).Error; err != nil {
 				tx.Rollback()
 				fmt.Println("Error:", err)
 				return
@@ -81,8 +81,6 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 			// StsCetak3:           value[""].(string),
 			TujuanPakai1: value["TUJU_PAK1"].(string),
 			Email1:       value["E_MAIL"].(string),
-			NoLeas:       value["NO_LEAS"].(string),
-			Angsuran:     value["JML_ANGSURAN"].(string),
 			Agama1:       value["KODE_AGAMA"].(string),
 			SediaDihub:   value["SEDIA_DIHUB"].(string),
 			JnsMotor:     value["JNS_MOTOR"].(string),
@@ -104,6 +102,12 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 		}
 		if value["NO_TELEPON"] != nil {
 			hdFaktur.NoTelp1 = value["NO_TELEPON"].(string)
+		}
+		if value["NO_LEAS"] != nil {
+			hdFaktur.NoLeas = value["NO_LEAS"].(string)
+		}
+		if value["JML_ANGSURAN"] != nil {
+			hdFaktur.Angsuran = value["JML_ANGSURAN"].(string)
 		}
 		if value["NO_HP"] != nil {
 			hdFaktur.NoHp1 = value["NO_HP"].(string)

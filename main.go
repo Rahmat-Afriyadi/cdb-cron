@@ -13,7 +13,6 @@ import (
 func Log(content string) {
 	fileName := "log.txt"
 
-	// Open the file for appending (create if it doesn't exist)
 	file, err := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
@@ -21,7 +20,6 @@ func Log(content string) {
 	}
 	defer file.Close()
 
-	// Append the new line to the file
 	_, err = file.WriteString(content + "\n")
 	if err != nil {
 		fmt.Println("Error writing to file:", err)
