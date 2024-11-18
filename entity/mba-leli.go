@@ -67,6 +67,7 @@ type MbaLeliFull struct {
 	KdClient            string     `gorm:"column:kd_client"`
 	Email1              string     `gorm:"column:email1"`
 	NoLeas              string     `gorm:"column:no_leas"`
+	NoLeas2             string     `gorm:"column:no_leas2"`
 	Angsuran            string     `gorm:"column:angsuran"`
 	Agama1              string     `gorm:"column:agama1"`
 	SediaDihub          string     `gorm:"column:sedia_dihub"`
@@ -79,9 +80,11 @@ type MbaLeliFull struct {
 	SmInstagram1        string     `gorm:"column:sm_instagram1"`
 	SmTwitter1          string     `gorm:"column:sm_twitter1"`
 	SmYoutube1          string     `gorm:"column:sm_youtube1"`
+	Hobby2              string     `gorm:"column:hobby2"`
 	Hobby3              string     `gorm:"column:hobby3"`
 	NoKk                string     `gorm:"column:no_kk"`
 	TglFaktur           string     `gorm:"column:tgl_faktur"`
+	KecKtr              string     `gorm:"column:kec_ktr"`
 	KerjaDiFkt          string     `gorm:"column:kerja_di_fkt"`
 	AlamatKtrFkt        string     `gorm:"column:alamat_ktr_fkt"`
 	KecKtrFkt           string     `gorm:"column:kec_ktr_fkt"`
@@ -97,6 +100,9 @@ type MbaLeliFull struct {
 	Hobby1              string     `gorm:"default:'';column:hobby1"`
 	NmKerja2            string     `gorm:"default:'';column:nm_kerja2"`
 	AlasanTdkDownload   string     `gorm:"default:'';column:alasan_tdk_download"`
+	KetNoHp1            string     `gorm:"default:'';column:ket_no_hp1"`
+	KetNoTelp1          string     `gorm:"default:'';column:ket_no_telp1"`
+	KetNoTelp2          string     `gorm:"default:'';column:ket_no_telp2"`
 
 	IdMerkMtrSeblm        string  `gorm:"default:'';column:id_merk_mtr_seblm"`
 	IdJnsMtrSeblm         string  `gorm:"default:'';column:id_jns_mtr_seblm"`
