@@ -115,7 +115,7 @@ func UpdateData(mohonFaktur []map[string]interface{}) {
 			}
 
 			batch := hdFakturs[i:end]
-			if err := tx.Table("hd_faktur2024").Save(&batch).Error; err != nil {
+			if err := tx.Table("hd_faktur2025").Save(&batch).Error; err != nil {
 				tx.Rollback()
 				log.Fatalf("error in batch insert: %v", err)
 			}

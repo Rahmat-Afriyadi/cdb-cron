@@ -14,7 +14,7 @@ func SaveTrWmsFaktur2(hdFakturs []entity.MbaLeliFull) {
 	localDb := config.NewLocalDB()
 	if len(hdFakturs) > 0 {
 		tx := localDb.Begin()
-		batchSize := 500
+		batchSize := 250
 		for i := 0; i < len(hdFakturs); i += batchSize {
 			end := i + batchSize
 			if end > len(hdFakturs) {
@@ -86,13 +86,15 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 			JnsMotor:     value["JNS_MOTOR"].(string),
 			SmDibeli:     value["SM_DIBELI"].(string),
 			PropMohon:    value["PROP_MOHON"].(string),
-			Hobby3:       value["HOBI"].(string),
 			NoKk:         value["NO_KK"].(string),
 			TglFaktur:    value["TGL_FAKTUR"].(string),
 			AktifJual:    value["AKTIF_JUAL"].(string),
 		}
 		if value["NM2_MOHON"] != nil {
 			hdFaktur.NmCustomer12 = value["NM2_MOHON"].(string)
+		}
+		if value["HOBI"] != nil {
+			hdFaktur.Hobby3 = value["HOBI"].(string)
 		}
 		if value["TGL_LAHIR"] != nil {
 			tglLahir1, err1 := time.Parse("2006-01-02", value["TGL_LAHIR"].(string))
