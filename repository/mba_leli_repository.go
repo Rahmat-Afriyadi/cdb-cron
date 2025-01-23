@@ -232,7 +232,7 @@ func InsertDataMbaLeli(mohonFaktur []map[string]interface{}) {
 	}
 	if len(hdFakturs) > 0 {
 		tx := localDb2.Begin()
-		batchSize := 1000
+		batchSize := 250
 		for i := 0; i < len(hdFakturs); i += batchSize {
 			end := i + batchSize
 			if end > len(hdFakturs) {
